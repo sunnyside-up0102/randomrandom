@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:get/get.dart';
+import 'package:youtube_ad2/category.dart';
 import 'package:youtube_ad2/screen/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_ad2/provider/food_provider.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: HomePage(),
+      home: CategoryScreen(),
     );
   }
 }

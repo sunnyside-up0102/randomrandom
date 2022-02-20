@@ -17,8 +17,20 @@ class FoodResult extends ChangeNotifier {
 class Category extends ChangeNotifier {
   List category = total;
 
+  void addCategory(List list) {
+    category = category + list;
+    notifyListeners();
+  }
+
   void selectCategory(List list) {
     category = list;
     notifyListeners();
+  }
+
+  void removeCategory(List list) {
+    for (String item in list) {
+      category.remove(item);
+      notifyListeners();
+    }
   }
 }

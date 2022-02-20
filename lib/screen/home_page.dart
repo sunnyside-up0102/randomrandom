@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:get/get.dart';
+import 'package:youtube_ad2/provider/food_name.dart';
 import 'result_screen.dart';
 import 'package:youtube_ad2/provider/food_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   InterstitialAd? interstitialAd;
   bool isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<Category>(context, listen: false);
+  }
 
   @override
   void didChangeDependencies() {
@@ -36,15 +43,38 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Map mapItem = {
+    '전체': total,
+    "중국": chn,
+    "한국": kor,
+    "일본": jpn,
+    "동남아": asia,
+    "유럽": eu,
+    "브런치": brunch,
+  };
+
   String? value;
-  List<String> listItem = ["전체", "중국", "한국", "일본", "동남아", "유럽", "아메리카"];
+  List<String> listItem = [
+    "전체",
+    "중국",
+    "한국",
+    "일본",
+    "동남아",
+    "유럽",
+    "아메리카",
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      // decoration: BoxDecoration(
+      //   image: DecorationImage(
+      //     fit: BoxFit.cover,
+      //     image: AssetImage('assets/images/bg3.png'), // 배경 이미지
+      //   ),
+      // ),
       child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.orange[300],
           appBar: AppBar(
             automaticallyImplyLeading: false,
             elevation: 0,
@@ -54,6 +84,8 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(
                   fontFamily: 'Chilgok',
                   color: Colors.yellow.shade300,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -80,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     elevation: 40,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100)),
-                    primary: Colors.orange,
+                    primary: Colors.orange[300],
                     padding: const EdgeInsets.only(
                       top: 9,
                       bottom: 15,
@@ -93,9 +125,13 @@ class _HomePageState extends State<HomePage> {
                       interstitialAd!.show();
                       context
                           .read<FoodResult>()
-                          .selectFood(context.watch<Category>().category);
+                          .selectFood(context.read<Category>().category);
+
                       Get.to(() => ResultScreen());
                     } else {
+                      context
+                          .read<FoodResult>()
+                          .selectFood(context.read<Category>().category);
                       Get.to(() => ResultScreen());
                     }
                   },
@@ -125,7 +161,6 @@ class _HomePageState extends State<HomePage> {
                     hint: Text(
                       "음식종류",
                       style: TextStyle(
-                        fontFamily: 'Chilgok',
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
@@ -135,7 +170,14 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(Icons.arrow_drop_down, color: Colors.red),
                     isExpanded: true,
                     items: listItem.map(valueItem).toList(),
-                    onChanged: (value) => setState(() => this.value = value),
+                    onChanged: (value) {
+                      setState(() => this.value = value);
+
+                      context
+                          .read<Category>()
+                          .selectCategory(mapItem[this.value]);
+                      debugPrint(context.read<Category>().category.toString());
+                    },
                   ),
                 )
               ],
